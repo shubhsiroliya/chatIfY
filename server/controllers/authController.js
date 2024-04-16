@@ -3,8 +3,8 @@ import generateTokenAndSetCookie from "../utils/generateToken.js";
 
 export const signupController = async (req,res)=>{
     try{
-        const {name,username,password,confirmPassword,gender} = req.body;
-        if(password !== confirmPassword) {
+        const {fullname:name,username,password,confirmpassword,gender} = req.body;
+        if(password !== confirmpassword) {
             return res.status(400).json({message:"Password and Confirm Password do not match"});
         }
 
@@ -45,12 +45,9 @@ export const signupController = async (req,res)=>{
 }
 
 export const loginController = async (req,res)=>{
-    // 660d8057403eb83a83538507 shubh
-    // 65f694ec675c49d6eac9eab3 yagya
     try{
         const {username,password} = req.body;
         const user = await userModel.findOne({username});
-        console.log(user);
         if(user && await user.matchPassword(password)){
             generateTokenAndSetCookie(user._id,res);
             res.status(200).json({
